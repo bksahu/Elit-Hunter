@@ -19,9 +19,9 @@ class ModelSQLite(object):
     def item_type(self, new_item_type):
         self._item_type = new_item_type
 
-    def create_item(self, title, link, website, link_id):
+    def create_item(self, title, link, created_at, website, link_id):
         sqlite.insert_one(
-            self.connection, title, link, link_id, website, table_name=self.item_type)
+            self.connection, title, link, link_id, created_at, website, table_name=self.item_type)
 
     def create_items(self, items):
         sqlite.insert_many(

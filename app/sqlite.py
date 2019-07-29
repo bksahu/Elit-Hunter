@@ -80,21 +80,21 @@ def scrub(input_string):
 def create_table(conn, table_name):
     table_name = scrub(table_name)
     sql = 'CREATE TABLE {} (rowid INTEGER PRIMARY KEY AUTOINCREMENT,' \
-          'title TEXT , link TEXT, link_id INTEGER, website TEXT)'.format(table_name)
+          'title TEXT , link TEXT, link_id INTEGER, created_at TEXT, website TEXT)'.format(table_name)
     try:
         conn.execute(sql)
     except OperationalError as e:
         print(e)
 
 @connection
-def insert_one(conn, title, link, link_id, website, table_name):
+def insert_one(conn, title, link, link_id, created_at, website, table_name):
     """ Insert single row into table
     """
     table_name = scrub(table_name)
-    sql = "INSERT INTO {} ('title', 'link', 'link_id', 'website') VALUES (?, ?, ?, ?)"\
+    sql = "INSERT INTO {} ('title', 'link', 'link_id', 'created_at', 'website') VALUES (?, ?, ?, ?, ?)"\
         .format(table_name)
     try:
-        conn.execute(sql, (title, link, link_id, website))
+        conn.execute(sql, (title, link, link_id, created_at, website))
         conn.commit()
     except Error as e:
         print(e)
@@ -104,15 +104,16 @@ def insert_many(conn, items, table_name):
     """ Insert many rows into table
     """
     table_name = scrub(table_name)
-    sql = "INSERT INTO {} ('title', 'link', 'link_id', 'website') VALUES (?, ?, ?, ?)"\
+    sql = "INSERT INTO {} ('title', 'link', 'link_id', 'created_at', 'website') VALUES (?, ?, ?, ?, ?)"\
         .format(table_name)
     entries = list()
     for x in items:
-        entries.append((x['title'], x['link'], x['link_id'], x['website']))
+        entries.append((x['title'], x['link'], x['link_id'], x['created_at'], x['website']))
     try:
         conn.executemany(sql, entries)
         conn.commit()
     except Error as e:
+        import ipdb; ipdb.set_trace()
         print(e)
 
 def tuple_to_dict(mytuple):
@@ -123,7 +124,8 @@ def tuple_to_dict(mytuple):
     mydict['title'] = mytuple[1]
     mydict['link'] = mytuple[2]
     mydict['link_id'] = mytuple[3]
-    mydict['website'] = mytuple[4]
+    mydict['created_at'] = mytuple[4]
+    mydict['website'] = mytuple[5]
     return mydict
 
 @connection

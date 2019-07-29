@@ -28,7 +28,7 @@ class MovieLinks:
     getLinks
         return valid links with there title
     """
-    def __init__(self, base_link, start=0, end=None):
+    def __init__(self, base_link, start=1000, end=None):
         assert type(base_link) is str
         self.base_link = base_link
         self.start = start
@@ -45,7 +45,10 @@ class MovieLinks:
         return response.url
 
     def getLinkId(self, link):
-        return link.split("/")[-1]
+        return int(link.split("/")[-1])
+
+    def getCreatedDate(self, response):
+        return fromstring(response.content).findtext('.//time')
 
     async def checkForAliveLinks(self):
         title_links = []
@@ -66,7 +69,8 @@ class MovieLinks:
                         'title': self.getTitle(response),
                         'link': link,
                         'link_id': self.getLinkId(link),
-                        'website': self.getBaseLink(link)
+                        'website': self.getBaseLink(link),
+                        'created_at': self.getCreatedDate(response)
                     })
 
         self.title_links = title_links
