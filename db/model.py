@@ -1,4 +1,5 @@
 import db.sqlite as sqlite
+import time
 
 class ModelSQLite(object):
 
@@ -32,5 +33,8 @@ class ModelSQLite(object):
             self.connection, website, self.item_type)
 
     def get_all_items(self):
-        return sqlite.select_all(
+        items = sqlite.select_all(
             self.connection, self._item_type, 'row_id', True)
+        for item in items:
+            item['created_at'] = time.ctime(item['created_at']).replace('00:00:00 ', '')
+        return items
