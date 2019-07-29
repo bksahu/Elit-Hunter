@@ -1,5 +1,7 @@
 import sys
 import requests
+import asyncio
+import concurrent.futures
 
 from lxml.html import fromstring
 from urllib.parse import urlparse
@@ -31,38 +33,48 @@ class MovieLinks:
         self.base_link = base_link
         self.start = start
         self.end = end
+        self.title_links = None
 
-    def getTitle(self, request):
-        return fromstring(request.content).findtext('.//title')
-
-    def checkIfLinkAlive(self, link):
-        request = requests.get(link)
-        if request.status_code == 200:
-            return request
-        return None
+    def getTitle(self, response):
+        return fromstring(response.content).findtext('.//title')
 
     def getBaseLink(self, link):
         return urlparse(link).hostname
 
-    def getLinks(self):
-        print("Scraping links...")
-        if not self.end:
-            self.end = sys.maxsize
+    def getLink(self, response):
+        return response.url
+
+    def getLinkId(self, link):
+        return link.split("/")[-1]
+
+    async def checkForAliveLinks(self):
         title_links = []
-        for i in range(self.start, self.end):
-            link = '{}/{}'.format(self.base_link, i)
+        with concurrent.futures.ThreadPoolExecutor(max_workers=20) as executor:
+            loop = asyncio.get_event_loop()
+            responses = [
+                loop.run_in_executor(
+                    executor,
+                    requests.get,
+                    "{}/{}".format(self.base_link, i)
+                )
+                for i in range(self.start, self.end)
+            ]
+            for response in await asyncio.gather(*responses):
+                if response.status_code == 200:
+                    link = self.getLink(response)
+                    title_links.append({
+                        'title': self.getTitle(response),
+                        'link': link,
+                        'link_id': self.getLinkId(link),
+                        'website': self.getBaseLink(link)
+                    })
 
-            request = self.checkIfLinkAlive(link)
+        self.title_links = title_links
+        print("Done")
 
-            if request:
-                title_links.append({
-                    'title': self.getTitle(request),
-                    'link': link,
-                    'link_id': i,
-                    'website': self.getBaseLink(link)
-                })
-            # if next 100 links are inactive break
-            if i - self.start and not self.end >= 50:
-                break
-        return title_links
+    def getLinks(self):
+        print("Scraping links...", end="")
+        loop = asyncio.get_event_loop()
+        loop.run_until_complete(self.checkForAliveLinks())
+        return self.title_links
 

@@ -5,7 +5,7 @@ def fetch_and_store(base, website, start_id=None):
     m = ModelSQLite()
     if not start_id:
         start_id = m.getLastId(website) + 1
-    moviebaba = MovieLinks(base, start_id, 1200)
+    moviebaba = MovieLinks(base, start_id, 1400)
     links = moviebaba.getLinks()
     m.create_items(links)
 

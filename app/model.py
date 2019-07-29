@@ -5,7 +5,7 @@ class ModelSQLite(object):
     def __init__(self):
         self._item_type = 'movies'
         self._connection = sqlite.connect_to_db(sqlite.DB_name)
-        #sqlite.create_table(self.connection, self._item_type)
+        sqlite.create_table(self.connection, self._item_type)
 
     @property
     def connection(self):
