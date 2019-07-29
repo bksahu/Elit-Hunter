@@ -80,7 +80,7 @@ def scrub(input_string):
 def create_table(conn, table_name):
     table_name = scrub(table_name)
     sql = 'CREATE TABLE {} (rowid INTEGER PRIMARY KEY AUTOINCREMENT,' \
-          'title TEXT , link TEXT, link_id INTEGER, created_at TEXT, website TEXT)'.format(table_name)
+          'title TEXT , link TEXT, link_id INTEGER, created_at INTEGER, website TEXT)'.format(table_name)
     try:
         conn.execute(sql)
     except OperationalError as e:
@@ -113,7 +113,6 @@ def insert_many(conn, items, table_name):
         conn.executemany(sql, entries)
         conn.commit()
     except Error as e:
-        import ipdb; ipdb.set_trace()
         print(e)
 
 def tuple_to_dict(mytuple):

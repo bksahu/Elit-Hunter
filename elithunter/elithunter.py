@@ -4,6 +4,7 @@ import asyncio
 import concurrent.futures
 
 from lxml.html import fromstring
+from dateutil import parser
 from urllib.parse import urlparse
 
 class MovieLinks:
@@ -48,7 +49,8 @@ class MovieLinks:
         return int(link.split("/")[-1])
 
     def getCreatedDate(self, response):
-        return fromstring(response.content).findtext('.//time')
+        datetime = fromstring(response.content).findtext('.//time')
+        return parser.parse(datetime).timestamp()
 
     async def checkForAliveLinks(self):
         title_links = []
@@ -77,7 +79,6 @@ class MovieLinks:
         print("Done")
 
     def getLinks(self):
-        print("Scraping links...", end="")
         loop = asyncio.get_event_loop()
         loop.run_until_complete(self.checkForAliveLinks())
         return self.title_links
