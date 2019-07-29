@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8">
+  <title>{{title}}</title>
+  <link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css'>
+<link rel='stylesheet' href='https://cdn.datatables.net/1.10.12/css/dataTables.bootstrap.min.css'>
+<link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css'>
+<link rel="stylesheet" href="./static/style.css">
+</head>
+<body>
+
+<img src="static/logo.png" style="margin: 0 auto" alt="logo" class="img-responsive text-center" width="60%" height="50%">
+
+<!-- partial:index.partial.html -->
+<div class="container">
+  <table class="table table-bordered table-hover" cellspacing="0" width="100%">
+      <thead>
+          <tr>
+              <th class="col-md-2">Title</th>
+              <th class="col-md-2">Link</th>
+              <th class="col-md-2">Date Created</th>
+          </tr>
+      </thead>
+      <tbody>
+          {% for item in data %}
+          <tr>
+              <td>{{item['title']}}</td>
+              <td><a target="_blank" href="{{item['link']}}">{{item['link']}}</a></td>
+              <td>{{item['created_at']}}</td>
+          </tr>
+          {% endfor %}
+      </tbody>
+  </table>
+</div>
+<!-- partial -->
+  <script src='http://code.jquery.com/jquery-1.12.3.js'></script>
+<script src='https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js'></script>
+<script src='https://cdn.datatables.net/responsive/2.1.0/js/dataTables.responsive.min.js'></script>
+<script src='https://cdn.datatables.net/1.10.12/js/dataTables.bootstrap.min.js'></script>
+<script  src="./static/script.js"></script>
+
+</body>
+</html>

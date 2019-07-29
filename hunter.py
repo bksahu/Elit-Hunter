@@ -1,7 +1,7 @@
 import time
 
 from elithunter.elithunter import MovieLinks
-from app.model import ModelSQLite
+from db.model import ModelSQLite
 
 
 def fetch(base, website, m, start_id=None, end_id=None):
@@ -16,10 +16,10 @@ def main():
     try:
         m = ModelSQLite()
         print("Fetching MoviesBaba links...", end="")
-        moviesBaba = fetch("https://links.moviebaba.in/archives", "links.moviebaba.in", m, 37000, 38000)
+        moviesBaba = fetch("https://links.moviebaba.in/archives", "links.moviebaba.in", m)
         time.sleep(60)
         print("Fetching kmhd links...", end="")
-        kmhd = fetch("https://kmhd.pw/archives", "kmhd.pw", m, 48000, 49000)
+        kmhd = fetch("https://kmhd.pw/archives", "kmhd.pw", m)
         links = moviesBaba + kmhd
         m.create_items(sorted(links, key=lambda i:i["created_at"]))
     except Exception as e:

@@ -1,7 +1,6 @@
 import os
 from sqlite3 import connect, OperationalError, IntegrityError, ProgrammingError, Error
 
-os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
 DB_name = 'elitDB'
 

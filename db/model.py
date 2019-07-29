@@ -5,7 +5,7 @@ class ModelSQLite(object):
     def __init__(self):
         self._item_type = 'movies'
         self._connection = sqlite.connect_to_db(sqlite.DB_name)
-        sqlite.create_table(self.connection, self._item_type)
+        #sqlite.create_table(self.connection, self._item_type)
 
     @property
     def connection(self):
@@ -30,3 +30,7 @@ class ModelSQLite(object):
     def getLastId(self, website):
         return sqlite.select_last_id(
             self.connection, website, self.item_type)
+
+    def get_all_items(self):
+        return sqlite.select_all(
+            self.connection, self._item_type, 'row_id', True)
