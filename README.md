@@ -11,13 +11,13 @@ $ cd Elit-Hunter
 $ pip install -r requirements.txt
 ```
 
-### To start the local server
+### Start the local server
 ```
 $ gunicorn app:app -b 127.0.0.1:5000
 ```
 To see your website running, open your browser and enter this URL: http://localhost:5000
 
-### To run the hunter to find new links
+### Run the hunter to find new links
 ```
 $ python hunter.py
 ```
