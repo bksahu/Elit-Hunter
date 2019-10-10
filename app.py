@@ -9,9 +9,12 @@ results = model.get_all_items()
 
 @app.route('/')
 def index():
-    return render_template("index.html",
-      data=results,
-      title='Elit Hunter')
+  """
+  Home page. Load index.html
+  """
+  return render_template("index.html",
+    data=results,
+    title='Elit Hunter')
 
 
 if __name__ == '__main__':
