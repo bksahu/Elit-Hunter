@@ -5,6 +5,14 @@ from db.model import ModelSQLite
 
 
 def fetch(base, website, m, start_id=None, end_id=None):
+    """ Fetchs the links.
+
+    base: Base address
+    webiste: Website address
+    m: SQL object
+    start_id: Starting link ID
+    end_id: Ending link ID
+    """
     if not start_id:
         start_id = m.getLastId(website) + 1
         end_id = start_id + 100
